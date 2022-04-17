@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate 3D heading and pitch</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.21/esri/css/main.css">
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viewDiv"></div>
+    <script>
+        var dojoConfig = {
+            async: 1,
+
+            packages: [
+                {
+                    name: "toolkit",
+                    location:
+                        window.location.origin +
+                        window.location.pathname.replace(/\/[^/]+$/, "") +
+                        "/toolkit",
+                },
+            ],
+        };
+
+    </script>
+    <script src="https://js.arcgis.com/4.21/"></script>
+    <script>
+        var root = document.getElementById("viewDiv");
+
+        require([
+            "esri/WebScene",
+            "esri/views/SceneView",
+            "./toolkit/DrawAirplaneViewModel.js",
+        ], function (
+            WebScene,
+            SceneView,
+            DrawAirplaneViewModel
+        ) {
+            /************************************************************
+             * Load a web scene and set it to the map property in a SceneView.
+             ************************************************************/
+            const scene = new WebScene({
+                portalItem: {
+                    id: "f2220db76c6448b4be8083d19ef4cf8d",
+                },
+            });
+            const view = new SceneView({
+                map: scene,
+                container: root,
+                environment: {
+                    lighting: {
+                        directShadowsEnabled: false,
+                    },
+                },
+            });
+
+            window.view = view;
+
+            const vm = new DrawAirplaneViewModel({
+                view: view,
+            });
+
+            vm.start();
+
+            window.vm = vm;
+        });
+
+    </script>
+</body>
+
+</html>
